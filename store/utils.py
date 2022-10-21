@@ -72,13 +72,5 @@ def guestOrder (request,data):
             quantity = item["quantity"]
         )
     
-    if order.shipping == True:
-        ShippingAddress.objects.create(
-            customer = customer,
-            order = order,
-            address = data["shipping"]["address"],
-            city = data["shipping"]["city"],
-            state = data["shipping"]["state"],
-            zip_code = data["shipping"]["zipcode"]
-        ).save()
-    return " "
+    
+    return customer,order
