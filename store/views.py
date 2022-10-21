@@ -169,37 +169,43 @@ def process_order(request):
 def register_customer (request):
     cartItems = 0
     if request.method ==  "POST":
-        first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name")
-        email = request.POST.get("email")
-        username = request.POST.get("username")
-        password1 = request.POST.get("password1")
-        password2 = request.POST.get("password2")
-        checkbox = request.POST.get("checkbox")
+        try:
+           first_name = request.POST.get("first_name")
+           last_name = request.POST.get("last_name")
+           email = request.POST.get("email")
+           username = request.POST.get("username")
+           password1 = request.POST.get("password1")
+           password2 = request.POST.get("password2")
+           checkbox = request.POST.get("checkbox")
+           
+           if password1 == password2:
+               if User.objects.filter(email = email).exists() or User.objects.filter(username = username).exists():
+                   messages.info(request,"Sorry, user with that username or password already exists. Please use another!")
+                   return render (request,"members/register.html",{"cartItems":cartItems})
+               else:
+                   if str(checkbox) == "on":
+                       user = User.objects.create_user(
+                           first_name = first_name,
+                           last_name = last_name,
+                           email = email,
+                           username = username,
+                           password = password1,
+                       )
+                       user.save()
+                       messages.success(request,"New account successfully created!")
+                       return redirect("login")
+                       
+                   else:
+                       messages.info(request,"Please, accept all statements in Term of services. Thank you!")
+                       return render (request,"members/register.html",{"cartItems":cartItems})
+           else:
+               messages.warning(request,"Password not matching!")
+               return render (request,"members/register.html",{"cartItems":cartItems})
         
-        if password1 == password2:
-            if User.objects.filter(email = email).exists() or User.objects.filter(username = username).exists():
-                messages.info(request,"Sorry, user with that username or password already exists. Please use another!")
-                return render (request,"members/register.html",{"cartItems":cartItems})
-            else:
-                if str(checkbox) == "on":
-                    user = User.objects.create_user(
-                        first_name = first_name,
-                        last_name = last_name,
-                        email = email,
-                        username = username,
-                        password = password1,
-                    )
-                    user.save()
-                    messages.success(request,"New account successfully created!")
-                    return redirect("login")
-                    
-                else:
-                    messages.info(request,"Please, accept all statements in Term of services. Thank you!")
-                    return render (request,"members/register.html",{"cartItems":cartItems})
-        else:
-            messages.warning(request,"Password not matching!")
+        except ValueError:
+            messages.info(request,"Input fields cannot be empty!")
             return render (request,"members/register.html",{"cartItems":cartItems})
+               
         
     else:
         return render(request,"members/register.html",{"cartItems":cartItems})
@@ -214,8 +220,12 @@ def login_customer(request):
         user = authenticate(username = username, password = password)
         if user is not None:
             login(request,user)
-            if request.user != request.user.customer.user:
-               return redirect("create_customer_account")
+            print("User",request.user)
+            try:
+                request.user.customer.user 
+            
+            except :    
+                return redirect("create_customer_account")
             else: 
                 products = Product.objects.all() 
                 customer = request.user.customer
