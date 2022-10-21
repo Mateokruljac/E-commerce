@@ -1,5 +1,5 @@
 {% extends "store/main.html" %}
-
+{% load static %}
 {% block content %}
 <section class="vh-100">
     <div class="container h-100">
@@ -84,8 +84,8 @@
                 </div>
                 <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
   
-                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                    class="img-fluid" alt="Sample image">
+                  <img src="{% static 'img/webShopLogo.png' %}"
+                    class="img-fluid logo" alt="Sample image">
   
                 </div>
               </div>
