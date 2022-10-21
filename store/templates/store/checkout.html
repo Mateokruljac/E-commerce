@@ -55,10 +55,10 @@
 			<div class="box-element">
 				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
 				<hr>
-				<h3>Order Summary</h3>
+				<h3>Order Summary {{order.get_total_items}}</h3>
 				<hr>
 				
-
+                     
 				    {% for item in items %}
 				<div class="cart-row">
                     {% if item.product.image %}
@@ -83,7 +83,7 @@
     <script type = "text/javascript">
 	  var form = document.getElementById("form")
       var shipping = "{{order.shipping}}"
-	  var total = "{{order.get_total_items}}"
+	  var total = "{{cartItemscd E}}"
 	  var userFormData = "{{request.user}}"
 	  
 	  

@@ -134,23 +134,17 @@ def process_order(request):
         customer = request.user.customer
         order,created = Order.objects.get_or_create(customer = customer,complete = False)
         
-        #check inputs of shipping fields etc. Create a shipping (address) with parsed data 
-        if order.shipping == True:
-           ShippingAddress.objects.create(
-               customer = customer,
-               order = order,
-               address = data["shipping"]["address"],
-               city = data["shipping"]["city"],
-               state = data["shipping"]["state"],
-               zip_code = data["shipping"]["zipcode"]
-           ).save()
+
     else:
        customer, order = guestOrder(request,data)
-    total = float (data["form"]["total"])
+       
+    total =  (data["form"]["total"])
+    
     order.transaction_id = transaction_id
     
     #user must be unable to manimulate with num of items
     print("TOTAL 1",total) 
+    print(data)
     print("TOTAL 2",order.get_total_items) 
     if int(total) == int(order.get_total_items):
         order.complete = True

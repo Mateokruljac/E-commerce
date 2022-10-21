@@ -49,20 +49,18 @@ def guestOrder (request,data):
     
     #it is neccessery to automatically create a new customer, 
     # check if user with that username or email already exits
-    if Customer.objects.filter(email = email).exists() or  Customer.objects.filter(name = username).exists():
-        pass
-    else:
-        customer = Customer.objects.create(
-            email = email,
-            name = username,
-        )
-        customer.save()
+   
+    customer = Customer.objects.create(
+        email = email,
+        name = username,
+    )
+    customer.save()
     
     #create a order
-    order = Order.objects.create(
+    order,create = Order.objects.get_or_create(
         customer = customer,
-        complete = False
-    ),
+        complete = False,
+    )
     
     for item in items:
         product = Product.objects.get(id = item["product"]["id"])        
@@ -71,6 +69,5 @@ def guestOrder (request,data):
             order = order,
             quantity = item["quantity"]
         )
-    
     
     return customer,order
