@@ -14,7 +14,8 @@
 						<th><h5>Items: <strong>{{cartItems}}</strong></h5></th>
 						<th><h5>Total:<strong> ${{full_total_price|floatformat:2}}</strong></h5>
 						{% if not full_total_price > 1500 %}
-						+ 35$ shipping 
+						+ 35$ shipping. <br>
+						Total price should be more then 1500 for free shipping!
 				        	</th>
 						{% else %}
 						<p>You are entitled to free shipping!</p>

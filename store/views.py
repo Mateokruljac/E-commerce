@@ -84,6 +84,7 @@ def checkout (request):
         cartItems = cookie_data["cartItems"]
         shipping = cookie_data["shipping"] 
         digitals = []
+    
         
         for i in range(len(items)):
             product = items[i]
@@ -91,9 +92,11 @@ def checkout (request):
         
         if False in digitals:
             shipping = True
-
+    
+    if full_total_price <= 1500:
+        full_total_price +=35
                
-        context = {"items":items,"full_total_price":full_total_price,"cartItems":cartItems,"shipping":shipping}
+    context = {"items":items,"full_total_price":full_total_price,"cartItems":cartItems,"shipping":shipping}
     return render (request,"store/checkout.html",context)
 
 def update_item (request):
